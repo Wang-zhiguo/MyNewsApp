@@ -100,7 +100,9 @@ public class MainActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
-                                mDatas = JsonUtil.getNewsList(response.body().string());
+                                //mDatas = JsonUtil.getNewsList(response.body().string());
+                                //使用Gson解析完成该功能
+                                mDatas = JsonUtil.getNewsListByGson(response.body().string());
                                 startIndex += pageSize;
                                 runOnUiThread(new Runnable() {
                                     @Override

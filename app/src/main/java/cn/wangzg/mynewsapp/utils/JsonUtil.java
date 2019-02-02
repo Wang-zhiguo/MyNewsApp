@@ -1,5 +1,7 @@
 package cn.wangzg.mynewsapp.utils;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,6 +66,29 @@ public class JsonUtil {
             e.printStackTrace();
         }
         //System.out.println(list);
+        return list;
+    }
+
+    /**
+     * 使用GSON进行解析
+     * @param strJson
+     * @return
+     */
+    public static ArrayList<Title> getNewsListByGson(String strJson) {
+        ArrayList<Title> list = null;
+        Gson gson = new Gson();
+        NewsBean newsBean = gson.fromJson(strJson,NewsBean.class);
+        if(newsBean.getMsg().equals("ok")){
+            /**
+             * 其实，在这里直接返回newsBean.getResult().getList()即可，因为这里面包含最全的信息
+             * 把返回值的类型修改了即可。
+             */
+            list = new ArrayList<>();
+            for(NewsBean.ResultBean.ListBean bean:newsBean.getResult().getList()){
+                Title title = new Title(bean.getTitle(),bean.getSrc(),bean.getPic(),bean.getUrl());
+                list.add(title);
+            }
+        }
         return list;
     }
 }
