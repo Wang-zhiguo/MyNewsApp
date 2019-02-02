@@ -8,6 +8,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+
 /**
  * Time: 2019/2/2
  * Author: wangzhiguo
@@ -127,5 +130,17 @@ public class HttpUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 使用OkHttp访问网络，异步调用
+     * @param address  网络地址
+     * @param callback  回调
+     */
+    public static void sendOkHttpRequest(String address, okhttp3.Callback callback){
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(address).build();
+        client.newCall(request).enqueue(callback);
     }
 }

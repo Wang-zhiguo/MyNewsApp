@@ -8,10 +8,14 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import cn.wangzg.mynewsapp.utils.HttpUtil;
 import cn.wangzg.mynewsapp.utils.JsonUtil;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
     private String address = "http://api.jisuapi.com/news/get?channel=头条&start=0&num=10&appkey=8c9dc97cca7a0f30";
@@ -43,23 +47,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-//        new Thread(){
-//            @Override
-//            public void run() {
-//                String sRet = HttpUtil.sendGet(address);
-//                mDatas = JsonUtil.getNewsList(sRet);
-//                startIndex += pageSize;
-//                //endIndex += pageSize;
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        adapter.setmDatas(mDatas);
-//                        adapter.notifyDataSetChanged();
-//                    }
-//                });
-//            }
-//        }.start();
-
 
         loadFinishFlag = true;
         //startIndex = 0;
@@ -79,19 +66,42 @@ public class MainActivity extends AppCompatActivity {
                         //标志位，防止多次加载
                         loadFinishFlag = false;
                         footer.findViewById(R.id.load_layout).setVisibility(View.VISIBLE);
+                        final String requestUrl = getAddress("头条", startIndex, pageSize);
+                        System.out.println(requestUrl);
                         //开线程加载数据
-                        new Thread() {
+//                        new Thread() {
+//                            @Override
+//                            public void run() {
+//                                try {
+//                                    String sRet = HttpUtil.sendGet(requestUrl);
+//                                    mDatas = JsonUtil.getNewsList(sRet);
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                }
+//                                startIndex += pageSize;
+//                                //endIndex += pageSize;
+//                                runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        adapter.addmDatas(mDatas);
+//                                        adapter.notifyDataSetChanged();
+//                                        footer.findViewById(R.id.load_layout).setVisibility(View.INVISIBLE);
+//                                        loadFinishFlag = true;
+//                                    }
+//                                });
+//                            }
+//                        }.start();
+
+                        HttpUtil.sendOkHttpRequest(requestUrl, new Callback() {
                             @Override
-                            public void run() {
-                                try {
-                                    String sRet = HttpUtil.sendGet(getAddress("头条",startIndex,pageSize));
-                                    mDatas = JsonUtil.getNewsList(sRet);
-                                    Thread.sleep(3000);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                mDatas = JsonUtil.getNewsList(response.body().string());
                                 startIndex += pageSize;
-                                //endIndex += pageSize;
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -102,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
                             }
-                        }.start();
+                        });
                     }
                 }
             }
