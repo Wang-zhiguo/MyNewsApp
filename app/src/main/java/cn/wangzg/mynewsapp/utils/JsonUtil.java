@@ -74,7 +74,7 @@ public class JsonUtil {
      * @param strJson
      * @return
      */
-    public static ArrayList<Title> getNewsListByGson(String strJson) {
+    public static ArrayList<NewsBean.ResultBean.ListBean> getNewsListByGson(String strJson) {
         ArrayList<Title> list = null;
         Gson gson = new Gson();
         NewsBean newsBean = gson.fromJson(strJson,NewsBean.class);
@@ -83,12 +83,13 @@ public class JsonUtil {
              * 其实，在这里直接返回newsBean.getResult().getList()即可，因为这里面包含最全的信息
              * 把返回值的类型修改了即可。
              */
-            list = new ArrayList<>();
-            for(NewsBean.ResultBean.ListBean bean:newsBean.getResult().getList()){
-                Title title = new Title(bean.getTitle(),bean.getSrc(),bean.getPic(),bean.getUrl());
-                list.add(title);
-            }
+            return (ArrayList<NewsBean.ResultBean.ListBean>) newsBean.getResult().getList();
+//            list = new ArrayList<>();
+//            for(NewsBean.ResultBean.ListBean bean:newsBean.getResult().getList()){
+//                Title title = new Title(bean.getTitle(),bean.getSrc(),bean.getPic(),bean.getUrl());
+//                list.add(title);
+//            }
         }
-        return list;
+        return null;
     }
 }
