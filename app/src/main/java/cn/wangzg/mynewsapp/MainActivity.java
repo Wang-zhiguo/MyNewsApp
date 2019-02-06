@@ -11,17 +11,20 @@ import android.widget.ListView;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import cn.wangzg.mynewsapp.utils.CommonAdapter;
 import cn.wangzg.mynewsapp.utils.HttpUtil;
 import cn.wangzg.mynewsapp.utils.JsonUtil;
+import cn.wangzg.mynewsapp.utils.NewsBean;
+import cn.wangzg.mynewsapp.utils.ViewHolder;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
     private String address = "http://api.jisuapi.com/news/get?channel=头条&start=0&num=10&appkey=8c9dc97cca7a0f30";
-    private ArrayList<Title> mDatas = null;
+    private ArrayList<NewsBean.ResultBean.ListBean> mDatas = null;
     private ListView listView = null;
-    private TitleAdapter adapter = null;
+    private CommonAdapter<NewsBean.ResultBean.ListBean> adapter = null;
     private View footer;
     private boolean loadFinishFlag;
     private int startIndex = 0;
@@ -35,15 +38,22 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.mylist);
         footer = getLayoutInflater().inflate(R.layout.footer_layout, null);
         listView.addFooterView(footer);
-        adapter = new TitleAdapter(this,R.layout.list_view_item,mDatas);
+        adapter = new CommonAdapter<NewsBean.ResultBean.ListBean>(this,mDatas,R.layout.list_view_item) {
+            @Override
+            public void convert(ViewHolder helper, NewsBean.ResultBean.ListBean item) {
+                helper.setText(R.id.title_text,item.getTitle());
+                helper.setText(R.id.descr_text,item.getSrc());
+                helper.setImageByUrl(R.id.title_pic,item.getPic());
+            }
+        };
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             Intent intent = new Intent(MainActivity.this, ContentActivity.class);
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Title title = mDatas.get(position);
+                NewsBean.ResultBean.ListBean title = adapter.getmDatas().get(position);
                 intent.putExtra("title","社会新闻");
-                intent.putExtra("uri",title.getUri());
+                intent.putExtra("uri",title.getUrl());
                 startActivity(intent);
             }
         });
