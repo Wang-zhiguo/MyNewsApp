@@ -108,7 +108,7 @@ public class ViewHolder {
      * 为ImageView设置图片
      *
      * @param viewId
-     * @param drawableId
+     * @param bm
      * @return
      */
     public ViewHolder setImageBitmap(int viewId, Bitmap bm)
@@ -122,7 +122,7 @@ public class ViewHolder {
      * 为ImageView设置图片
      *
      * @param viewId
-     * @param drawableId
+     * @param url
      * @return
      */
     public ViewHolder setImageByUrl(int viewId, String url)

@@ -65,7 +65,6 @@ public class JsonUtil {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //System.out.println(list);
         return list;
     }
 

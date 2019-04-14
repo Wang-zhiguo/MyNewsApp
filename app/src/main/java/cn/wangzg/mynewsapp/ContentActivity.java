@@ -24,15 +24,15 @@ public class ContentActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.mipmap.ic_back);
         }
+        String title = getIntent().getStringExtra("title");
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(title);
 
         webView = (WebView)findViewById(R.id.web_view);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());
 
         String uri = getIntent().getStringExtra("uri");
-        String title = getIntent().getStringExtra("title");
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(title);
         webView.loadUrl(uri);
 
     }

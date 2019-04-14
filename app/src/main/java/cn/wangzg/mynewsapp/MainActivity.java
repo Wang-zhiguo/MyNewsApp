@@ -3,6 +3,7 @@ package cn.wangzg.mynewsapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -34,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("新闻");
+        setSupportActionBar(toolbar);
 
         listView = findViewById(R.id.mylist);
         footer = getLayoutInflater().inflate(R.layout.footer_layout, null);
@@ -131,12 +136,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 根据新闻分类、开始位置、分页大小，返回URL字符串
+     * @param channel 新闻分类，如："头条","新闻","财经","体育","娱乐", "军事", "教育", "科技", "NBA", "股票", "星座", "女性", "健康", "育儿"
+     * @param start 开始位置
+     * @param pageSize  返回数据数量，分页大小
+     * @return
+     */
     private String getAddress(String channel,int start,int pageSize){
-        System.out.println("------------start-------------------");
         String address = "http://api.jisuapi.com/news/get?channel=${channel}&start=${start}&num=${pageSize}&appkey=8c9dc97cca7a0f30";
         return address.replace("${channel}",channel)
                 .replace("${start}",start+"")
                 .replace("${pageSize}",pageSize+"");
-
     }
 }
