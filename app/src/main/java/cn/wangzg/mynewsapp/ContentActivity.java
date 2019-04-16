@@ -51,9 +51,9 @@ public class ContentActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public void finish() {
-        super.finish();
-        overridePendingTransition(R.anim.down_in, R.anim.down_out);
-    }
+//    @Override
+//    public void finish() {
+//        super.finish();
+//        overridePendingTransition(R.anim.down_in, R.anim.down_out);
+//    }
 }
