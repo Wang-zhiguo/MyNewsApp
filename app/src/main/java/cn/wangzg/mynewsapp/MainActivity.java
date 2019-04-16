@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("title","社会新闻");
                 intent.putExtra("uri",title.getUrl());
                 startActivity(intent);
+                overridePendingTransition(R.anim.up_in, R.anim.up_out);
             }
         });
 
